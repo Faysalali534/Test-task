@@ -43,12 +43,15 @@ class SignupView(generics.CreateAPIView):
     serializer_class = UserSerializer
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        user = serializer.instance
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            user = serializer.instance
 
-        return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -74,11 +77,14 @@ class ProductViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductSearchView(generics.ListAPIView):
@@ -118,25 +124,31 @@ class ProductSearchView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        query = self.request.query_params.get('query', '')
-        sort_by = self.request.query_params.get('sort_by', 'name')
-        sort_order = self.request.query_params.get('sort_order', 'asc')
+        try:
+            query = self.request.query_params.get('query', '')
+            sort_by = self.request.query_params.get('sort_by', 'name')
+            sort_order = self.request.query_params.get('sort_order', 'asc')
 
-        products = Product.objects.filter(name__icontains=query)
-        fields = ProductSerializer.Meta.fields
+            products = Product.objects.filter(name__icontains=query)
+            fields = ProductSerializer.Meta.fields
 
-        # Apply sorting based on the sort_by and sort_order parameters
-        if sort_by in fields:
-            # Construct the sort field based on sort_by and sort_order
-            sort_field = sort_by if sort_order == 'asc' else f"-{sort_by}"
-            products = products.order_by(sort_field)
+            # Apply sorting based on the sort_by and sort_order parameters
+            if sort_by in fields:
+                # Construct the sort field based on sort_by and sort_order
+                sort_field = sort_by if sort_order == 'asc' else f"-{sort_by}"
+                products = products.order_by(sort_field)
 
-        return products
+            return products
+        except Exception as e:
+            return Product.objects.none()
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            queryset = self.get_queryset()
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductSelectViewSet(viewsets.ModelViewSet):
