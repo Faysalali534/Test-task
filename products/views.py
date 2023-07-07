@@ -1,3 +1,5 @@
+from rest_framework.exceptions import ValidationError
+
 from .models import User
 from .serializers import UserSerializer
 from rest_framework import permissions, generics
@@ -50,8 +52,10 @@ class SignupView(generics.CreateAPIView):
             user = serializer.instance
 
             return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -84,7 +88,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             headers = self.get_success_headers(serializer.data)
             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         except Exception as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductSearchView(generics.ListAPIView):
@@ -148,7 +152,7 @@ class ProductSearchView(generics.ListAPIView):
             serializer = self.get_serializer(queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response(str(e), status=status.HTTP_400_BAD_REQUEST)
+            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductSelectViewSet(viewsets.ModelViewSet):
