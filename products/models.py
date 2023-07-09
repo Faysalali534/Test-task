@@ -25,3 +25,11 @@ class ProductSelection(models.Model):
 
     def __str__(self):
         return f'{self.user.username} selected {self.product.name} at {self.selected_at}'
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'product'],
+                name='unique_user_product'
+            )
+        ]

@@ -1,3 +1,4 @@
+import django
 from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions
 from rest_framework.decorators import action
@@ -243,6 +244,10 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
                 return Response(
                     create_json_response(status=True, message=f"Product Selected by user {request.user.username}",
                                          data=serializer.data))
+        except django.db.utils.IntegrityError:
+            return Response(
+                create_json_response(status=True, message=f"Product Selected by user {request.user.username} again"),
+                status=status.HTTP_200_OK)
         except Product.DoesNotExist:
             return Response(create_json_response(status=False, message="Product doesnt exist"),
                             status=status.HTTP_404_NOT_FOUND)
