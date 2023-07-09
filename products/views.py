@@ -1,18 +1,23 @@
 import django
 from django.contrib.auth.models import User
-from rest_framework import generics, viewsets, permissions
+from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
+from rest_framework_simplejwt.exceptions import InvalidToken
+from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.views import TokenViewBase
 
 from product_manager.utils import create_json_response
-from products.models import Product, ProductSelection
-from products.serializers import UserSerializer, ProductSerializer, ProductSelectionSerializer
+from products.models import Product
+from products.models import ProductSelection
+from products.serializers import UserSerializer
+from products.serializers import ProductSerializer
+from products.serializers import ProductSelectionSerializer
 
 
 class SignupView(generics.CreateAPIView):
@@ -300,7 +305,7 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
         except ProductSelection.DoesNotExist:
             return Response(create_json_response(status=False, message="Product selection doesn't exist"),
                             status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+        except Exception:
             return Response(create_json_response(status=False, message="General Error on Deselect API"),
                             status=status.HTTP_400_BAD_REQUEST)
 
