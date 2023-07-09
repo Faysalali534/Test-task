@@ -11,7 +11,7 @@ from rest_framework_simplejwt.settings import api_settings
 from rest_framework_simplejwt.views import TokenViewBase
 
 from product_manager.utils import create_json_response
-from products.models import Product
+from products.models import Product, ProductSelection
 from products.serializers import UserSerializer, ProductSerializer, ProductSelectionSerializer
 
 
@@ -253,6 +253,55 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_404_NOT_FOUND)
         except Exception:
             return Response(create_json_response(status=False, message="General Error on Select API"),
+                            status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['put'])
+    def deselect(self, request, pk=None):
+        """
+        API endpoint to deselect a product.
+
+        Marks the specified product as not selected.
+
+        Request method: PUT
+        Endpoint: /api/product/{id}/deselect/
+
+        Parameters:
+            - {id}: The ID of the product to be deselected.
+
+        Returns:
+            - 200 OK: Product deselected successfully.
+                Response Payload:
+                {
+                    "status": true,
+                    "message": "Product Deselected by user aastasaayyassb",
+                    "data": [
+                        {
+                            "user": 1,
+                            "product": 1,
+                            "selected": false
+                        }
+                    ]
+                }
+
+            - 404 NOT FOUND: Product with the specified ID not found.
+
+        Raises:
+            - HTTPError: If there is a general error on the Deselect API.
+
+        """
+        try:
+            product_selection = ProductSelection.objects.get(user_id=request.user.id, product_id=pk)
+            serializer = ProductSelectionSerializer(product_selection, data={'selected': False}, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    create_json_response(status=True, message=f"Product Deselected by user {request.user.username}",
+                                         data=serializer.data))
+        except ProductSelection.DoesNotExist:
+            return Response(create_json_response(status=False, message="Product selection doesn't exist"),
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(create_json_response(status=False, message="General Error on Deselect API"),
                             status=status.HTTP_400_BAD_REQUEST)
 
 # class ProductSearchView(generics.ListAPIView):

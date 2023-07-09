@@ -11,5 +11,6 @@ urlpatterns = [
     # path('auth/logout', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('product/create/', ProductViewSet.as_view({'post': 'create'}), name='product-create'),
     path('product/search/', ProductSearchView.as_view(), name='product-search'),
-    path('product/<int:pk>/select/', ProductSelectViewSet.as_view({'post': 'select'}), name='product-select'),
+    path('product/<int:pk>/select/', ProductSelectViewSet.as_view({'post': 'select', "put": "deselect"}),
+         name='product-select'),
 ]

@@ -27,3 +27,8 @@ class ProductSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSelection
         fields = ('user', 'product', 'selected')
+
+    def update(self, instance, validated_data):
+        instance.selected = validated_data.get('selected', instance.selected)
+        instance.save()
+        return instance
