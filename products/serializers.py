@@ -26,6 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSelection
+        depth = 1
         fields = ('user', 'product', 'selected')
 
     def update(self, instance, validated_data):

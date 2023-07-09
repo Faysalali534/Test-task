@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.exceptions import InvalidToken
@@ -308,6 +309,15 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
         except Exception:
             return Response(create_json_response(status=False, message="General Error on Deselect API"),
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProductListView(ListAPIView):
+    serializer_class = ProductSelectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return ProductSelection.objects.filter(user=user)
 
 # class ProductSearchView(generics.ListAPIView):
 #     """
