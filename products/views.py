@@ -195,48 +195,48 @@ class ProductSearchView(generics.ListAPIView):
         except Exception as e:
             return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
 
-# class ProductSelectViewSet(viewsets.ModelViewSet):
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     @action(detail=True, methods=['post'])
-#     def select(self, request, pk=None):
-#         """
-#         API endpoint to select a product.
-#
-#         Marks the specified product as selected.
-#
-#         Request method: POST
-#         Endpoint: /api/product/{id}/select/
-#
-#         Parameters:
-#         - {id}: The ID of the product to be selected.
-#
-#         Returns the serialized data of the selected product.
-#
-#         Returns:
-#             200 OK: Product selected successfully.
-#                 Response Payload:
-#                 {
-#                     "id": "integer",
-#                     "name": "string",
-#                     "description": "string",
-#                     "price": "decimal",
-#                     "stock": "integer",
-#                     "selected": true
-#                 }
-#
-#             404 NOT FOUND: Product with the specified ID not found.
-#         """
-#         try:
-#             product = self.get_object()
-#             product.selected = True
-#             product.save()
-#             serializer = self.get_serializer(product)
-#             return Response(serializer.data)
-#         except Product.DoesNotExist:
-#             return Response(status=status.HTTP_404_NOT_FOUND)
+class ProductSelectViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    @action(detail=True, methods=['post'])
+    def select(self, request, pk=None):
+        """
+        API endpoint to select a product.
+
+        Marks the specified product as selected.
+
+        Request method: POST
+        Endpoint: /api/product/{id}/select/
+
+        Parameters:
+        - {id}: The ID of the product to be selected.
+
+        Returns the serialized data of the selected product.
+
+        Returns:
+            200 OK: Product selected successfully.
+                Response Payload:
+                {
+                    "id": "integer",
+                    "name": "string",
+                    "description": "string",
+                    "price": "decimal",
+                    "stock": "integer",
+                    "selected": true
+                }
+
+            404 NOT FOUND: Product with the specified ID not found.
+        """
+        try:
+            product = self.get_object()
+            product.selected = True
+            product.save()
+            serializer = self.get_serializer(product)
+            return Response(serializer.data)
+        except Product.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 # class ProductSearchView(generics.ListAPIView):
