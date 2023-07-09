@@ -211,23 +211,28 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
         Endpoint: /api/product/{id}/select/
 
         Parameters:
-        - {id}: The ID of the product to be selected.
-
-        Returns the serialized data of the selected product.
+            - {id}: The ID of the product to be selected.
 
         Returns:
-            200 OK: Product selected successfully.
+            - 200 OK: Product selected successfully.
                 Response Payload:
-                {
-                    "id": "integer",
-                    "name": "string",
-                    "description": "string",
-                    "price": "decimal",
-                    "stock": "integer",
-                    "selected": true
-                }
+                            {
+                "status": true,
+                "message": "Product Selected by user aastasaayyassb",
+                "data": [
+                    {
+                        "user": 1,
+                        "product": 1,
+                        "selected": true
+                    }
+                ]
+            }
 
-            404 NOT FOUND: Product with the specified ID not found.
+            - 404 NOT FOUND: Product with the specified ID not found.
+
+        Raises:
+            - HTTPError: If there is a general error on the Select API.
+
         """
         try:
 
@@ -239,8 +244,9 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
                     create_json_response(status=True, message=f"Product Selected by user {request.user.username}",
                                          data=serializer.data))
         except Product.DoesNotExist:
-            return Response(create_json_response(status=False, message=e), status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+            return Response(create_json_response(status=False, message="Product doesnt exist"),
+                            status=status.HTTP_404_NOT_FOUND)
+        except Exception:
             return Response(create_json_response(status=False, message="General Error on Select API"),
                             status=status.HTTP_400_BAD_REQUEST)
 
