@@ -26,15 +26,3 @@ class ProductSelection(models.Model):
 
     def __str__(self):
         return f'{self.user.username} selected {self.product.name} at {self.selected_at}'
-
-#
-# class Selection(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     selected = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return f'{self.user.username} selected {self.product.name}'
-#
-#     def __str__(self):
-#         return self.name
