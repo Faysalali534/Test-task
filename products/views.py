@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import generics, viewsets, permissions
+from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 
 from rest_framework.response import Response
@@ -10,7 +11,7 @@ from rest_framework_simplejwt.views import TokenViewBase
 
 from product_manager.utils import create_json_response
 from products.models import Product
-from products.serializers import UserSerializer, ProductSerializer
+from products.serializers import UserSerializer, ProductSerializer, ProductSelectionSerializer
 
 
 class SignupView(generics.CreateAPIView):
@@ -195,9 +196,8 @@ class ProductSearchView(generics.ListAPIView):
         except Exception as e:
             return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProductSelectViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     @action(detail=True, methods=['post'])
@@ -230,14 +230,19 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
             404 NOT FOUND: Product with the specified ID not found.
         """
         try:
-            product = self.get_object()
-            product.selected = True
-            product.save()
-            serializer = self.get_serializer(product)
-            return Response(serializer.data)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
+            serializer = ProductSelectionSerializer(
+                data=dict(user=request.user.id, product=pk, selected=True))
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    create_json_response(status=True, message=f"Product Selected by user {request.user.username}",
+                                         data=serializer.data))
+        except Product.DoesNotExist:
+            return Response(create_json_response(status=False, message=e), status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response(create_json_response(status=False, message="General Error on Select API"),
+                            status=status.HTTP_400_BAD_REQUEST)
 
 # class ProductSearchView(generics.ListAPIView):
 #     """

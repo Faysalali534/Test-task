@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Product
+from .models import User, Product, ProductSelection
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -21,3 +21,9 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'name', 'description', 'price', 'stock']
+
+
+class ProductSelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSelection
+        fields = ('user', 'product', 'selected')
