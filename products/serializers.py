@@ -32,6 +32,8 @@ class ProductSelectionSerializer(serializers.ModelSerializer):
         specified_depth = kwargs.get('context')
         if specified_depth:
             self.Meta.depth = specified_depth.get('depth')
+        else:
+            self.Meta.depth = 0
 
         super(ProductSelectionSerializer, self).__init__(*args, **kwargs)
 
