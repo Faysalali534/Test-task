@@ -335,6 +335,54 @@ class UserProductListView(ListAPIView):
         return context
 
     def list(self, request, *args, **kwargs):
+        """
+                API endpoint to retrieve products of a user.
+
+                Returns the list of products selected by the user.
+
+                Request method: GET
+                Endpoint: /api/user/products/
+
+                Returns:
+                    - 200 OK: Products retrieved successfully.
+                        Response Payload:
+                                        {
+                    "status": true,
+                    "message": "Products Overview",
+                    "data": [
+                        [
+                            {
+                                "id": 4,
+                                "name": "adada",
+                                "description": "This is a sample product description.",
+                                "price": "121.00",
+                                "stock": 2
+                            },
+                            {
+                                "id": 1,
+                                "name": "amazon",
+                                "description": "This is a sample product description.",
+                                "price": "121.00",
+                                "stock": 2
+                            },
+                            {
+                                "id": 3,
+                                "name": "some",
+                                "description": "This is a sample product description.",
+                                "price": "121.00",
+                                "stock": 2
+                            },
+                            {
+                                "id": 2,
+                                "name": "wwd",
+                                "description": "This is a sample product description.",
+                                "price": "121.00",
+                                "stock": 2
+                            }
+                        ]
+                    ]
+                    }
+                """
         queryset = self.filter_queryset(self.get_queryset())
 
         page = self.paginate_queryset(queryset)
