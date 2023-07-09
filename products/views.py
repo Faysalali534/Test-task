@@ -101,6 +101,7 @@ class TokenRefreshView(TokenViewBase):
         return Response(create_json_response(status=True, message="Token Created", data=serializer.validated_data),
                         status=status.HTTP_200_OK)
 
+
 class ProductViewSet(viewsets.ModelViewSet):
     """
     API endpoint for Creating products.
@@ -127,10 +128,9 @@ class ProductViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(create_json_response(status=True, message="Product Created", data=serializer.data))
         except Exception as e:
-            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
+            return Response(create_json_response(status=False, message=e), status=status.HTTP_400_BAD_REQUEST)
 
 
 class ProductSearchView(generics.ListAPIView):
@@ -159,7 +159,6 @@ class ProductSearchView(generics.ListAPIView):
                     "description": "string",
                     "price": "decimal",
                     "stock": "integer",
-                    "selected": "boolean"
                 },
                 ...
             ]
@@ -195,7 +194,6 @@ class ProductSearchView(generics.ListAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
-
 
 # class ProductSelectViewSet(viewsets.ModelViewSet):
 #     queryset = Product.objects.all()
