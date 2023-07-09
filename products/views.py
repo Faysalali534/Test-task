@@ -1,14 +1,25 @@
+# from rest_framework.exceptions import ValidationError
+#
+# from .models import User
+# from .serializers import UserSerializer
+# from rest_framework import permissions, generics
+#
+# from rest_framework import viewsets, status
+# from rest_framework.decorators import action
+# from rest_framework.response import Response
+# from .models import Product
+# from .serializers import ProductSerializer
+#
+#
+from django.contrib.auth.models import User
+from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 
-from .models import User
-from .serializers import UserSerializer
-from rest_framework import permissions, generics
-
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Product
-from .serializers import ProductSerializer
+from rest_framework import status
+
+from product_manager.utils import create_json_response
+from products.serializers import UserSerializer
 
 
 class SignupView(generics.CreateAPIView):
@@ -50,150 +61,151 @@ class SignupView(generics.CreateAPIView):
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             user = serializer.instance
-
-            return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
+            return Response(create_json_response(status=True, message="user created", data=UserSerializer(user).data),
+                            status=status.HTTP_201_CREATED)
         except ValidationError as e:
-            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
+            return Response(create_json_response(status=False, message=e),
+                            status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
+            return Response(create_json_response(status=False, message=e),
+                            status=status.HTTP_400_BAD_REQUEST)
 
-
-class ProductViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for Creating products.
-
-    Provides CRUD (Create) operations for products.
-
-    Allowed HTTP methods: POST
-    Endpoint: /api/product/create/
-
-    POST:
-        Creates a new product with the provided data.
-
-    Returns:
-        - POST : The serialized data of the created product.
-
-    Permissions:
-        - Only authenticated users can access this endpoint.
-    """
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        try:
-            serializer = self.get_serializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            self.perform_create(serializer)
-            headers = self.get_success_headers(serializer.data)
-            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-        except Exception as e:
-            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProductSearchView(generics.ListAPIView):
-    """
-    API endpoint for searching and sorting products.
-
-    Allows users to search for products based on a query string and sort the search results.
-
-    Request method: GET
-    Endpoint: /api/product/search/
-
-    Query Parameters:
-    - query (optional): The search query string.
-    - sort_by (optional): The field to sort the search results by. Defaults to 'name'.
-    - sort_order (optional): The sort order for the search results. 'asc' for ascending (default), 'desc' for descending.
-
-    Returns a list of serialized products based on the search query and sorting parameters.
-
-    Returns:
-        200 OK: Successful search operation.
-            Response Payload:
-            [
-                {
-                    "id": "integer",
-                    "name": "string",
-                    "description": "string",
-                    "price": "decimal",
-                    "stock": "integer",
-                    "selected": "boolean"
-                },
-                ...
-            ]
-
-        400 BAD REQUEST: Invalid query or sorting parameters.
-    """
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get_queryset(self):
-        try:
-            query = self.request.query_params.get('query', '')
-            sort_by = self.request.query_params.get('sort_by', 'name')
-            sort_order = self.request.query_params.get('sort_order', 'asc')
-
-            products = Product.objects.filter(name__icontains=query)
-            fields = ProductSerializer.Meta.fields
-
-            # Apply sorting based on the sort_by and sort_order parameters
-            if sort_by in fields:
-                # Construct the sort field based on sort_by and sort_order
-                sort_field = sort_by if sort_order == 'asc' else f"-{sort_by}"
-                products = products.order_by(sort_field)
-
-            return products
-        except Exception as e:
-            return Product.objects.none()
-
-    def list(self, request, *args, **kwargs):
-        try:
-            queryset = self.get_queryset()
-            serializer = self.get_serializer(queryset, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
-
-
-class ProductSelectViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAuthenticated]
-
-    @action(detail=True, methods=['post'])
-    def select(self, request, pk=None):
-        """
-        API endpoint to select a product.
-
-        Marks the specified product as selected.
-
-        Request method: POST
-        Endpoint: /api/product/{id}/select/
-
-        Parameters:
-        - {id}: The ID of the product to be selected.
-
-        Returns the serialized data of the selected product.
-
-        Returns:
-            200 OK: Product selected successfully.
-                Response Payload:
-                {
-                    "id": "integer",
-                    "name": "string",
-                    "description": "string",
-                    "price": "decimal",
-                    "stock": "integer",
-                    "selected": true
-                }
-
-            404 NOT FOUND: Product with the specified ID not found.
-        """
-        try:
-            product = self.get_object()
-            product.selected = True
-            product.save()
-            serializer = self.get_serializer(product)
-            return Response(serializer.data)
-        except Product.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+# class ProductViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint for Creating products.
+#
+#     Provides CRUD (Create) operations for products.
+#
+#     Allowed HTTP methods: POST
+#     Endpoint: /api/product/create/
+#
+#     POST:
+#         Creates a new product with the provided data.
+#
+#     Returns:
+#         - POST : The serialized data of the created product.
+#
+#     Permissions:
+#         - Only authenticated users can access this endpoint.
+#     """
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def create(self, request, *args, **kwargs):
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             self.perform_create(serializer)
+#             headers = self.get_success_headers(serializer.data)
+#             return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+#         except Exception as e:
+#             return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# class ProductSearchView(generics.ListAPIView):
+#     """
+#     API endpoint for searching and sorting products.
+#
+#     Allows users to search for products based on a query string and sort the search results.
+#
+#     Request method: GET
+#     Endpoint: /api/product/search/
+#
+#     Query Parameters:
+#     - query (optional): The search query string.
+#     - sort_by (optional): The field to sort the search results by. Defaults to 'name'.
+#     - sort_order (optional): The sort order for the search results. 'asc' for ascending (default), 'desc' for descending.
+#
+#     Returns a list of serialized products based on the search query and sorting parameters.
+#
+#     Returns:
+#         200 OK: Successful search operation.
+#             Response Payload:
+#             [
+#                 {
+#                     "id": "integer",
+#                     "name": "string",
+#                     "description": "string",
+#                     "price": "decimal",
+#                     "stock": "integer",
+#                     "selected": "boolean"
+#                 },
+#                 ...
+#             ]
+#
+#         400 BAD REQUEST: Invalid query or sorting parameters.
+#     """
+#     serializer_class = ProductSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     def get_queryset(self):
+#         try:
+#             query = self.request.query_params.get('query', '')
+#             sort_by = self.request.query_params.get('sort_by', 'name')
+#             sort_order = self.request.query_params.get('sort_order', 'asc')
+#
+#             products = Product.objects.filter(name__icontains=query)
+#             fields = ProductSerializer.Meta.fields
+#
+#             # Apply sorting based on the sort_by and sort_order parameters
+#             if sort_by in fields:
+#                 # Construct the sort field based on sort_by and sort_order
+#                 sort_field = sort_by if sort_order == 'asc' else f"-{sort_by}"
+#                 products = products.order_by(sort_field)
+#
+#             return products
+#         except Exception as e:
+#             return Product.objects.none()
+#
+#     def list(self, request, *args, **kwargs):
+#         try:
+#             queryset = self.get_queryset()
+#             serializer = self.get_serializer(queryset, many=True)
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         except Exception as e:
+#             return Response(dict(error=str(e)), status=status.HTTP_400_BAD_REQUEST)
+#
+#
+# class ProductSelectViewSet(viewsets.ModelViewSet):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+#
+#     @action(detail=True, methods=['post'])
+#     def select(self, request, pk=None):
+#         """
+#         API endpoint to select a product.
+#
+#         Marks the specified product as selected.
+#
+#         Request method: POST
+#         Endpoint: /api/product/{id}/select/
+#
+#         Parameters:
+#         - {id}: The ID of the product to be selected.
+#
+#         Returns the serialized data of the selected product.
+#
+#         Returns:
+#             200 OK: Product selected successfully.
+#                 Response Payload:
+#                 {
+#                     "id": "integer",
+#                     "name": "string",
+#                     "description": "string",
+#                     "price": "decimal",
+#                     "stock": "integer",
+#                     "selected": true
+#                 }
+#
+#             404 NOT FOUND: Product with the specified ID not found.
+#         """
+#         try:
+#             product = self.get_object()
+#             product.selected = True
+#             product.save()
+#             serializer = self.get_serializer(product)
+#             return Response(serializer.data)
+#         except Product.DoesNotExist:
+#             return Response(status=status.HTTP_404_NOT_FOUND)
