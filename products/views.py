@@ -245,15 +245,25 @@ class ProductSelectViewSet(viewsets.ModelViewSet):
 
             serializer = ProductSelectionSerializer(
                 data=dict(user=request.user.id, product=pk, selected=True))
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(
                     create_json_response(status=True, message=f"Product Selected by user {request.user.username}",
                                          data=serializer.data))
-        except django.db.utils.IntegrityError:
+        except django.db.utils.IntegrityError as e:
             return Response(
                 create_json_response(status=True, message=f"Product Selected by user {request.user.username} again"),
                 status=status.HTTP_200_OK)
+        except ValidationError as e:
+            error_detail = e.detail
+            error_message = error_detail.get('non_field_errors', None)
+            if str(error_message[0]).__contains__('unique'):
+                return Response(
+                    create_json_response(status=True,
+                                         message=f"Product Selected by user {request.user.username} again"),
+                    status=status.HTTP_200_OK)
+            return Response(create_json_response(status=False, message=e),
+                            status=status.HTTP_400_BAD_REQUEST)
         except Product.DoesNotExist:
             return Response(create_json_response(status=False, message="Product doesnt exist"),
                             status=status.HTTP_404_NOT_FOUND)
@@ -318,6 +328,23 @@ class UserProductListView(ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return ProductSelection.objects.filter(user=user)
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"depth": 1})
+        return context
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(create_json_response(status=True, message=f"Products of user {request.user.username}",
+                                             data=serializer.data))
 
 # class ProductSearchView(generics.ListAPIView):
 #     """

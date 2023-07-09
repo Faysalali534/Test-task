@@ -26,8 +26,14 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductSelectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductSelection
-        depth = 1
         fields = ('user', 'product', 'selected')
+
+    def __init__(self, *args, **kwargs):
+        specified_depth = kwargs.get('context')
+        if specified_depth:
+            self.Meta.depth = specified_depth.get('depth')
+
+        super(ProductSelectionSerializer, self).__init__(*args, **kwargs)
 
     def update(self, instance, validated_data):
         instance.selected = validated_data.get('selected', instance.selected)
