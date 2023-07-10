@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"aastasaayyassb\",\n  \n    \"password\": \"aas2sbj1q2\"\n}",
+					"raw": "{\n    \"username\": \"a2astsasssasayyassb\",\n  \n    \"password\": \"aas2sbj1q2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -46,7 +46,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"aastasaayyassb\",\n    \"email\": \"haasjk@ccc.com\",\n    \"password\": \"aas2sbj1q2\"\n}",
+					"raw": "{\n    \"username\": \"a2astsasssasayyassb\",\n    \"email\": \"haasjk2@sccc.com\",\n    \"password\": \"aas2sbj1q2\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -80,7 +80,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4ODgyMDIzNiwiaWF0IjoxNjg4NzMzODM2LCJqdGkiOiJlZjc3NWUwYzFkZmY0Yjg5OWQxZmFmYmU5ZjZkM2RkMiIsInVzZXJfaWQiOjJ9.iJJimPJb09-v-kX0cZShBnAqE6kJhpxRTU4a9YKhfm8\"}",
+					"raw": "{\"refresh\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY4OTAwMDY2OSwiaWF0IjoxNjg4OTE0MjY5LCJqdGkiOiIzZGZjNGRjNjk3ZGE0Y2MyODFiNDI2MTY0MjYyNzkwNyIsInVzZXJfaWQiOjF9.W7LI6Qh7rmnoWq9kaQcxJeGdA6YpKBEHo1gVuUg-zos\"}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -155,13 +155,14 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4NzM3MTAzLCJpYXQiOjE2ODg3MzY4MDMsImp0aSI6ImIzYWFkNjVhZDk5NDRhNzY5MzZhNWJhYTQzY2M3MzA0IiwidXNlcl9pZCI6Mn0.QgiJhFaRebaHpcu8AZK0cFmJKNrJKBfbgEu06gc3gtw",
-						"type": "text"
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4OTE1NjczLCJpYXQiOjE2ODg5MTUzNzMsImp0aSI6IjgzYTEyOGMyZTYyZDQ3MWQ4MDQ3YTc5MjdiZjFiNWY1IiwidXNlcl9pZCI6MX0.AqWLEP-HUq_EV2wr9ctkBTlDc-HDRUBPCnPD1iumS64",
+						"type": "text",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"name\": \"amazon\",\n  \"description\": \"This is a sample product description.\",\n  \"price\": 121,\n  \"stock\": 2\n}",
+					"raw": "{\n  \"name\": \"adada\",\n  \"description\": \"This is a sample product description.\",\n  \"price\": 121,\n  \"stock\": 2\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -195,7 +196,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4NzQzODg0LCJpYXQiOjE2ODg3NDM1ODQsImp0aSI6ImY0N2YzZTg5OTNlYTRlOTc5OGRkMmIyZjQ4MjEyMGNjIiwidXNlcl9pZCI6Mn0.VWbG6quCM367sYpUWZuieQJcLhh5xT1qhHGryOLI4Is",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4OTQ5OTY2LCJpYXQiOjE2ODg5NDIxNjYsImp0aSI6IjZkMDk0NWJmMzY5YTRmMTlhZDYxNTJkMDA0NjRhYTliIiwidXNlcl9pZCI6MX0.MWIV7XUk8EC5aIkycYQxigmKczcSznQsiYJ3GbsWcr0",
 						"type": "text"
 					}
 				],
@@ -218,12 +219,12 @@
 					"query": [
 						{
 							"key": "query",
-							"value": "Sample Product",
+							"value": "am",
 							"disabled": true
 						},
 						{
 							"key": "sort_by",
-							"value": "stock",
+							"value": "id",
 							"disabled": true
 						},
 						{
@@ -243,10 +244,60 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4NzM2MTI2LCJpYXQiOjE2ODg3MzU4MjYsImp0aSI6ImM2NzBlZDIxOGE2YTQzOTQ5ZTcxNzcxZGY3YjQ5NjBlIiwidXNlcl9pZCI6Mn0.56nFhS-sNvz4Lb3dLLDOxG0Pb9QAcATS2QQoVtXnojs",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4OTMyOTg4LCJpYXQiOjE2ODg5MjUxODgsImp0aSI6IjU1ZmE0MWQ3Y2NjOTRiM2ZhMThkMDQyNjEyYWRiNTUwIiwidXNlcl9pZCI6MX0.-0yZdURsvdIyx_0_opU4EOU8b74z7SLqbah-rGRiLjU",
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/product/4/select/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"product",
+						"4",
+						"select",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "unselect the product",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4OTIyMDc5LCJpYXQiOjE2ODg5MjE3NzksImp0aSI6ImFkNGIyZTZlYjA4YTQ5MmZiNGIyMzk1OTQ0ZjIyOWU3IiwidXNlcl9pZCI6Nn0.-rBr8wLALpe2hK2ccYB1IVW8Xtzjpq_flS9MfYtJObs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
 					"raw": "http://127.0.0.1:8000/api/product/1/select/",
 					"protocol": "http",
@@ -262,6 +313,49 @@
 						"product",
 						"1",
 						"select",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get selected products",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjg4OTMzNDI3LCJpYXQiOjE2ODg5MjU2MjcsImp0aSI6Ijg2MmVlZjEyNTNkOTRhYmM4ODIyZGEyYWYzZDZmMzY3IiwidXNlcl9pZCI6MX0.ELimLEUQjbBM0kgNKrjVTpLBYd_CQreLO7iAI6Oc_bE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/user/products/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"user",
+						"products",
 						""
 					]
 				}
